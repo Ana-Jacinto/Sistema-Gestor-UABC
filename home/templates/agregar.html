@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {% load static %}
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      #home {
+        background-image: url("{% static 'images/UABC.jpeg' %}");
+      }
+    </style>
+    <title>Agregar archivo | Repositorio UABC</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="nav-left">
+          <img class="logo" src="{% static 'images/uabc-logo.png' %}" alt="logo de UABC" />
+          <span>Repositorio de Cuerpo Académico FCA</span>
+        </a>
+        <ul class="menuList">
+          <li class="menuList-item">
+            <a href="{% url 'Index' %}">Inicio</a>
+          </li>
+          <li class="menuList-item">
+            <a href="{% url 'contenido' %}">Catálogo</a>
+          </li>
+        </ul>
+        <div class="nav-mobile">
+          <input
+            hidden=""
+            class="check-icon"
+            id="check-icon"
+            name="check-icon"
+            type="checkbox"
+          />
+          <label class="icon-menu" for="check-icon">
+            <div class="bar bar--1"></div>
+            <div class="bar bar--2"></div>
+            <div class="bar bar--3"></div>
+          </label>
+        </div>
+      </nav>
+    </header>
+    <main id="form" class="bg-img-container">
+        <div class="items-form">
+          <h4>Agregar una obra</h4>
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li{% if message.tags %} class="successlist"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            <form id="item-form" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-item">
+                  <h6 for="id_title">Título:</h6>
+                  {{ form.title }}
+                </div>
+                <div class="form-item">
+                  <h6 for="id_year">Año:</h6>
+                  {{ form.year }}
+                </div>
+                <div class="form-item">
+                  <h6 for="id_area">Área:</h6>
+                  {{ form.area }}
+                </div>
+                <div class="form-item">
+                  <h6 for="id_repository">Repositorio:</h6>
+                  {{ form.repository }}
+                </div>
+                <div class="form-item">
+                  <h6 for="id_content_type">Tipo de Contenido:</h6>
+                  {{ form.content_type }}
+                </div>
+                <div class="form-item">
+                  <h6 for="id_pdf">PDF:</h6>
+                  {{ form.pdf }}
+                </div>
+              <h6>Autores</h6>
+              <div id="author-formset">
+                  {{ formset.management_form }}
+                  {% for form in formset %}
+                      <div class="author-form">
+                        <p>
+                          <label for="id_authoritem_set-{{ forloop.counter0 }}-first_name">Nombre:</label>
+                          {{ form.first_name }}
+                      </p>
+                      <p>
+                          <label for="id_authoritem_set-{{ forloop.counter0 }}-last_name">Apellido:</label>
+                          {{ form.last_name }}
+                          {{ form.id }}
+                          {{ form.item }}
+                      </p>
+                      </div>
+                  {% endfor %}
+              </div>
+              <button class="form-btn" type="button" id="add-author">Agregar otro autor</button>
+              <button style="float: right; margin-top: 16px;" class="secondary-btn" type="submit">Agregar Obra</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+      <div class="footer-content">
+        <div class="top-footer">
+          <span>Nuestras Redes Sociales</span>
+        </div>
+        <nav class="bottom-footer">
+          <a target="_blank" href="https://www.facebook.com/fcatijuana/">
+            <i class="bx bxl-facebook-circle"></i>
+          </a>
+          <a
+            target="_blank"
+            href="https://www.instagram.com/fca.tij.uabc/?igshid=YmMyMTA2M2Y%3D"
+          >
+            <i class="bx bxl-instagram"></i>
+          </a>
+          <a
+            target="_blank"
+            href="https://www.tiktok.com/@fca.tij?_t=8UYWhCdbMPN&_r=1"
+          >
+            <i class="bx bxl-tiktok"></i>
+          </a>
+          <a target="_blank" href="https://www.youtube.com/c/FCATijuana">
+            <i class="bx bxl-youtube"></i>
+          </a>
+          <a target="_blank" href="https://www.linkedin.com/in/fcatijuana/">
+            <i class="bx bxl-linkedin"></i>
+          </a>
+        </nav>
+      </div>
+    </footer>
+    <script src="{% static 'js/scripts.js' %}"></script>
+  </body>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const formset = document.getElementById('author-formset');
+          const addAuthorButton = document.getElementById('add-author');
+          const totalForms = document.getElementById('id_authoritem_set-TOTAL_FORMS');
+
+          addAuthorButton.addEventListener('click', function() {
+              const formCount = parseInt(totalForms.value);
+              
+              const newFormHTML = `
+                  <div class="author-form">
+                      <p>
+                          <label for="id_authoritem_set-${formCount}-first_name">Nombre:</label>
+                          <input type="text" name="authoritem_set-${formCount}-first_name" maxlength="124" id="id_authoritem_set-${formCount}-first_name">
+                      </p>
+                      <p>
+                          <label for="id_authoritem_set-${formCount}-last_name">Apellido:</label>
+                          <input type="text" name="authoritem_set-${formCount}-last_name" maxlength="124" id="id_authoritem_set-${formCount}-last_name">
+                          <input type="hidden" name="authoritem_set-${formCount}-id" id="id_authoritem_set-${formCount}-id">
+                          <input type="hidden" name="authoritem_set-${formCount}-item" id="id_authoritem_set-${formCount}-item">
+                      </p>
+                  </div>
+              `;
+              
+              formset.insertAdjacentHTML('beforeend', newFormHTML);
+              
+              totalForms.value = formCount + 1;
+          });
+      });
+    </script>
+
+    <style>
+      .form-item {
+        margin-bottom: 12px;
+      }
+
+      .form-item input,  .form-item select{
+        width: 100%;
+      }
+
+      #author-formset {
+        max-height: 200px;
+        overflow-y: scroll;
+      }
+      .author-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .author-form p {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .form-btn {
+        background: var(--primary-color);
+        color: #fff;
+        padding-inline: 8px;
+        padding-block: 4px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 12px;
+        transition: background 400ms ease;
+      }
+    </style>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {% load static %}
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      #home {
+        background-image: url("{% static 'images/UABC.jpeg' %}");
+      }
+    </style>
+    <title>Inicio | Repositorio UABC</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="nav-left">
+          <img class="logo" src="{% static 'images/uabc-logo.png' %}" alt="logo de UABC" />
+          <span>Repositorio de Cuerpo Académico FCA</span>
+        </a>
+        <ul class="menuList">
+          <li class="menuList-item">
+            <a href="{% url 'Index' %}">Inicio</a>
+          </li>
+          <li class="menuList-item">
+            <a href="{% url 'contenido' %}">Catálogo</a>
+          </li>
+        </ul>
+        <div class="nav-mobile">
+          <input
+            hidden=""
+            class="check-icon"
+            id="check-icon"
+            name="check-icon"
+            type="checkbox"
+          />
+          <label class="icon-menu" for="check-icon">
+            <div class="bar bar--1"></div>
+            <div class="bar bar--2"></div>
+            <div class="bar bar--3"></div>
+          </label>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <section class="bg-img-container">
+        <div class="home-container">
+          <div class="home-content">
+            <div class="home-info">
+              <h1>Explora el Repositorio Digital FCA</h1>
+              <p>
+                Explora nuestro gran catálogo de libros de nuestra institución.
+              </p>
+            </div>
+            <form class="search-form" method="GET" action="{% url 'contenido' %}">
+              {% csrf_token %}
+              <div class="group">
+                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+                  <g>
+                    <path
+                      d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"
+                    ></path>
+                  </g>
+                </svg>
+                <input name="search" placeholder="Buscar por profesor o titulo de la obra." type="search" class="input" value="{{ search }}"/>
+              </div>
+              <button class="btn" type="submit">Buscar</button>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section id="contents">
+        <div class="contents-header">
+          <h2>Índice de contenidos</h2>
+        </div>
+        <div class="contents-cards">
+          <!----------------- YEAR OF PRODUCTION ----------------->
+          <article class="card">
+            <h5>Año de Producción</h5>
+            <ul>
+              {% for item in year_production %}
+              <li>
+                <a href="/contenido/?year={{ item.year }}">{{ item.year }}</a>
+                <span>Recursos: {{item.recursos}}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+          <!----------------- TYPE OF CONTENT ----------------->
+          <article class="card">
+            <h5>Tipo de contenido</h5>
+            <ul>
+              {% for item in content_types %}
+              <li>
+                <a href="/contenido/?content_type={{ item.content_type_id }}">{{ item.content_type__name }}</a>
+                <span>Recursos: {{item.num_items}}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+          <!----------------- AREA ----------------->
+          <article class="card">
+            <h5>Área</h5>
+            <ul>
+              {% for item in areas %}
+              <li>
+                <a href="/contenido/?area={{ item.area_id }}">{{ item.area__name }}</a>
+                <span>Recursos: {{item.num_items}}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+          <!----------------- REPOSITORIES ----------------->
+          <article class="card">
+            <h5>Repositorio</h5>
+            <ul>
+              {% for item in repositories %}
+              <li>
+                <a href="/contenido/?repository={{ item.repository_id }}">{{ item.repository__name }}</a>
+                <span>Recursos: {{ item.num_items }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+          <!----------------- LAST ADDED ----------------->
+          <article class="card">
+            <h5>Últimos Agregados</h5>
+            <ul>
+              {% for item in last_added %}
+              <li>
+                <a href="/contenido/{{item.id}}">{{ item.title }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+          <!----------------- Authors ----------------->
+          <article class="card">
+            <a class="link" href="{% url 'autores' %}">
+              <h5>Autores</h5>
+            </a>
+            <ul>
+              {% for author in authors %}
+              <li>
+                <a href="/contenido/?author_id={{ author.id }}">{{ author.first_name }} {{ author.last_name }}</a>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <div class="footer-content">
+        <div class="top-footer">
+          <span>Nuestras Redes Sociales</span>
+        </div>
+        <nav class="bottom-footer">
+          <a target="_blank" href="https://www.facebook.com/fcatijuana/">
+            <i class="bx bxl-facebook-circle"></i>
+          </a>
+          <a
+            target="_blank"
+            href="https://www.instagram.com/fca.tij.uabc/?igshid=YmMyMTA2M2Y%3D"
+          >
+            <i class="bx bxl-instagram"></i>
+          </a>
+          <a
+            target="_blank"
+            href="https://www.tiktok.com/@fca.tij?_t=8UYWhCdbMPN&_r=1"
+          >
+            <i class="bx bxl-tiktok"></i>
+          </a>
+          <a target="_blank" href="https://www.youtube.com/c/FCATijuana">
+            <i class="bx bxl-youtube"></i>
+          </a>
+          <a target="_blank" href="https://www.linkedin.com/in/fcatijuana/">
+            <i class="bx bxl-linkedin"></i>
+          </a>
+        </nav>
+        <a class="btn" href="{% url 'agregar' %}">
+          <span class="btn-content"></span>
+        </a>
+      </div>
+    </footer>
+    <script src="{% static 'js/scripts.js' %}"></script>
+  </body>
+</html>

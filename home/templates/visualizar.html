@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {% load static %}
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Archivo | Repositorio UABC</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/" class="nav-left">
+          <img class="logo" src="{% static 'images/uabc-logo.png' %}" alt="logo de UABC" />
+          <span>Repositorio de Cuerpo Académico FCA</span>
+        </a>
+        <ul class="menuList">
+          <li class="menuList-item">
+            <a href="{% url 'Index' %}">Inicio</a>
+          </li>
+          <li class="menuList-item">
+            <a href="{% url 'contenido' %}">Catálogo</a>
+          </li>
+        </ul>
+        <div class="nav-mobile">
+          <input
+            hidden=""
+            class="check-icon"
+            id="check-icon"
+            name="check-icon"
+            type="checkbox"
+          />
+          <label class="icon-menu" for="check-icon">
+            <div class="bar bar--1"></div>
+            <div class="bar bar--2"></div>
+            <div class="bar bar--3"></div>
+          </label>
+        </div>
+      </nav>
+    </header>
+    <main>
+        <div id="preview">
+            <div class="item-container fill-content">
+                <div class="info-content">
+                  <div class="info-top">
+                    <h4>{{item.title}}</h4>
+                    <div>
+                      <h5>Año:</h5>
+                      <span>{{item.year}}</span>
+                    </div>
+                    <div>
+                      <h5>Tipo de contenido:</h5>
+                      <span>{{item.content_type.name}}</span>
+                    </div>
+                    <div>
+                      <h5>Repositorio:</h5>
+                      <span>{{item.repository.name}}</span>
+                    </div>
+                    <div>
+                      <h5>Area:</h5>
+                      <span>{{item.area.name}}</span>
+                    </div>
+                    <div>
+                      <h5>Autores:</h5>
+                      <span>
+                        {% for author in authors %}
+                          {{ author.first_name }} {{ author.last_name }}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="info-bottom" style="margin-top: 24px;">
+                    <a class="secondary-btn" target="_blank" href="/media/{{ item.pdf }}">Visualizar</a>
+                  </div>
+                </div>
+                <div class="cover-content">
+                    <img src="/media/thumbnails/{{ item.id }}.jpg" alt="portada" />
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+      <div class="footer-content">
+        <div class="top-footer">
+          <span>Nuestras Redes Sociales</span>
+        </div>
+        <nav class="bottom-footer">
+          <a target="_blank" href="https://www.facebook.com/fcatijuana/">
+            <i class="bx bxl-facebook-circle"></i>
+          </a>
+          <a
+            target="_blank"
+            href="https://www.instagram.com/fca.tij.uabc/?igshid=YmMyMTA2M2Y%3D"
+          >
+            <i class="bx bxl-instagram"></i>
+          </a>
+          <a
+            target="_blank"
+            href="https://www.tiktok.com/@fca.tij?_t=8UYWhCdbMPN&_r=1"
+          >
+            <i class="bx bxl-tiktok"></i>
+          </a>
+          <a target="_blank" href="https://www.youtube.com/c/FCATijuana">
+            <i class="bx bxl-youtube"></i>
+          </a>
+          <a target="_blank" href="https://www.linkedin.com/in/fcatijuana/">
+            <i class="bx bxl-linkedin"></i>
+          </a>
+        </nav>
+        <a class="btn" href="{% url 'agregar' %}">
+          <span class="btn-content"></span>
+        </a>
+      </div>
+    </footer>
+    <script src="{% static 'js/scripts.js' %}"></script>
+  </body>
+</html>
